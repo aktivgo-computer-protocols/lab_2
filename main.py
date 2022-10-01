@@ -1,17 +1,14 @@
 import os
-import smtplib
-import imaplib
 import email_service
-
-import email
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-smtp = smtplib.SMTP(host='smtp.yandex.ru')
-imap = imaplib.IMAP4_SSL('imap.yandex.ru')
-
-email_service = email_service.EmailService(smtp, imap)
+servers = {
+    'smtp': 'smtp.yandex.ru',
+    'imap': 'imap.yandex.ru',
+    'pop3': 'pop.yandex.ru',
+}
 
 
 def get_auth():
@@ -33,20 +30,13 @@ def send_mail():
 
     message.attach(MIMEText(text, 'plain'))
 
-    auth = get_auth()
-
-    email_service.send_mail(auth, message)
+    email_service.send(get_auth(), message)
 
     print("successfully sent email to", message['To'])
 
 
-def receive_message_by_imap():
-    auth = get_auth()
-
-    print(email.message_from_string(email_service.receive_mail_by_imap(auth)))
-
-
 if __name__ == '__main__':
+    email_service = email_service.EmailService(servers, get_auth())
 
     print(
         "1. Send mail\n" +
@@ -59,4 +49,8 @@ if __name__ == '__main__':
     if choose == 1:
         send_mail()
     elif choose == 2:
-        receive_message_by_imap()
+        print(email_service.receive_by_imap())
+    elif choose == 3:
+        print(email_service.receive_by_pop3(get_auth()))
+    else:
+        print()
