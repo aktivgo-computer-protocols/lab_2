@@ -1,5 +1,4 @@
 start:
-	EMAIL_LOGIN=vladko4kin1@yandex.ru \
-	EMAIL_PASSWORD=yubkhzxjveyhoevt \
-	SMTP_LOGIN=vladko4kin1@yandex.ru \
+	EMAIL_LOGIN=vlad@fib.kolpkir.ru \
+	EMAIL_PASSWORD=1234 \
 	python3 main.py
