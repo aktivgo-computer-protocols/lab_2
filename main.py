@@ -1,16 +1,16 @@
 import os
 import time
 
-from smtp_client import SMTPClient
-from imap_client import IMAPClient
-from pop3_client import POP3Client
-from socket_smtp_client import SocketSmtpClient
-from socket_pop3_client import SocketPop3Client
+from smtp.client import SMTPClient
+from imap.client import IMAPClient
+from pop3.client import POP3Client
+from smtp.socket_client import SocketSmtpClient
+from pop3.socket_client import SocketPop3Client
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-HOST = 'mail.fib.kolpkir.ru'
+HOST = os.getenv('HOST')
 
 
 def get_auth():
@@ -85,12 +85,9 @@ if __name__ == '__main__':
         elif choose == 5:
             while True:
                 print(socket_pop3.list())
-
                 choose = int(input())
-
                 if choose == 0:
                     break
-
                 print(socket_pop3.receive_mail(choose))
         else:
             smtp.close()
