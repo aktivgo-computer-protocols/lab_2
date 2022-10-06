@@ -3,6 +3,7 @@ import poplib
 from email.parser import BytesParser
 from email.policy import default
 
+
 class POP3Client:
     def __init__(self, host: str, auth: []):
         self.pop3 = poplib.POP3(host)
@@ -28,3 +29,6 @@ class POP3Client:
             print(part.get_content_type())
             if part.get_content_maintype() == 'text':
                 return part.get_content()
+
+    def close(self):
+        self.pop3.close()
