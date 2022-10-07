@@ -13,27 +13,27 @@ class SocketPop3Client:
         self.client_socket.connect((host, port))
         recv = self.client_socket.recv(1024).decode()
         if recv[:3] != '+OK':
-            print('+OK reply not received from server.')
+            raise '+OK reply not received from server.'
 
     def __authorize__(self, auth: []):
         user_msg = 'USER %s\r\n' % auth['login']
         self.client_socket.send(user_msg.encode())
         recv = self.client_socket.recv(1024).decode()
         if recv[:3] != '+OK':
-            print('+OK reply not received from server.')
+            raise '+OK reply not received from server.'
 
         pass_msg = 'PASS %s\r\n' % auth['password']
         self.client_socket.send(pass_msg.encode())
         recv = self.client_socket.recv(1024).decode()
         if recv[:3] != '+OK':
-            print('+OK reply not received from server.')
+            raise '+OK reply not received from server.'
 
     def list(self):
         list_msg = 'LIST\r\n'
         self.client_socket.send(list_msg.encode())
         recv = self.client_socket.recv(1024).decode()
         if recv[:3] != '+OK':
-            print('+OK reply not received from server.')
+            raise '+OK reply not received from server.'
         return recv
 
     def receive_mail(self, index: int):
@@ -41,13 +41,10 @@ class SocketPop3Client:
         self.client_socket.send(retr_msg.encode())
         recv = self.client_socket.recv(1024).decode()
         if recv[:3] != '+OK':
-            print('+OK reply not received from server.')
+            raise '+OK reply not received from server.'
         return recv
 
     def close(self):
         q = "QUIT\r\n"
         self.client_socket.send(q.encode())
-
-        recv = self.client_socket.recv(1024)
-        print(recv.decode())
         self.client_socket.close()

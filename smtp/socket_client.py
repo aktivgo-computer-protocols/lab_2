@@ -13,13 +13,13 @@ class SocketSmtpClient:
         self.client_socket.connect((host, port))
         recv = self.client_socket.recv(1024).decode()
         if recv[:3] != '220':
-            print('220 reply not received from server.')
+            raise '220 reply not received from server.'
 
         helo_command = 'EHLO HOST\r\n'
         self.client_socket.send(helo_command.encode())
         recv = self.client_socket.recv(1024).decode()
         if recv[:3] != '250':
-            print('250 reply not received from server.')
+            raise '250 reply not received from server.'
 
     def __authorize__(self, auth: []):
         base64_str = ('\x00' + auth['login'] + "\x00" + auth['password']).encode()
@@ -27,7 +27,8 @@ class SocketSmtpClient:
         auth_msg = 'AUTH PLAIN '.encode() + base64_str + '\r\n'.encode()
         self.client_socket.send(auth_msg)
         recv = self.client_socket.recv(1024).decode()
-        print(recv)
+        if recv[:3] != '235':
+            raise '235 reply not received from server.'
 
     def send_mail(self, message):
         mail_from = 'MAIL FROM:<%s>\r\n' % message['from']
@@ -66,7 +67,4 @@ class SocketSmtpClient:
     def close(self):
         q = "QUIT\r\n"
         self.client_socket.send(q.encode())
-
-        recv = self.client_socket.recv(1024)
-        print(recv.decode())
         self.client_socket.close()

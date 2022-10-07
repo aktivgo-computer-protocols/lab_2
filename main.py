@@ -64,7 +64,7 @@ if __name__ == '__main__':
             '2. Receive last message by imap\n' +
             '3. Receive last message by pop\n' +
             '4. Send mail by socket smtp\n' +
-            '5. Receive last message by socket pop3\n' +
+            '5. Receive messages by socket pop3\n' +
             '0. Quit\n'
         )
 
